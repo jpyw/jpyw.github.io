@@ -1,23 +1,146 @@
 
-<html>
-    <head>
-        <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
 <title>富強、民主、文明、和諧、自由、平等、公正、法治、愛國、敬業、誠信、友善</title>
+<style>
+html, body { background: #ff00ba; font-family: 'Ubuntu'; } * { box-sizing: border-box; } .box { width: 450px; height: 100%; max-height: 500px; min-height: 450px; background: #ffffff; border-radius: 20px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 30px 50px; } .box .box__description { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); text-align: left; } .box .box__description .box__description-container { color: #f10f02; width: 380px; font-size: 18px; margin: 0 auto; text-align: center; } .box .box__description .box__description-container .box__description-title { font-size: 24px; letter-spacing: 0.5px; text-align: center; } .box .box__description .box__description-container .box__description-text { color: #333333; line-height: 20px; margin-top: 20px; } .box .box__description ul { list-style-type: none; font-size: 14px; font-size: 1.1rem; margin-top: 20px; padding: 0; padding-left: 5px; } .box .box__description ul li { margin: 8px 0; padding: 0 } .box .box__description ul small { font-size: .8em; color: #339933; margin-left: 10px } .box .box__description ul li a { text-decoration: none; color: #333333; } .box .box__description ul li a:hover { color: #CCCCCC } .box .box__description ul li a:hover small { color: inherit } @media(max-width:770px) { .box { width: 350px; } .box .box__description .box__description-container { width: 300px; } .box .box__description .box__description-container .box__description-title { font-size: 19px; } .box .box__description .box__description-container .box__description-text { font-size: 15px; }img {
+        height: 0;
+        width: 0;
+    } }
+ </style>
 </head>
 <body>
-<script type="text/javascript">
-    //定时3s后跳转主页
-    setInterval("goMain()",3000);
-function goMain(){
-var urlList=["https://miaomiao7.miaomiao2.sbs","https://miaomiao6.miaomiao2.sbs","https://miaomiao6.miaomiao2.sbs"];
-	document.location =urlList[Math.floor(Math.random()*urlList.length)]+"?"+window.location.href.split('?')[1];
-   }
-    </script>
-<p style="text-align:center">
-正在打開最新地址，請等待3秒鐘...<br>
-<br>
-爱是一道光，如此美妙<br>
-<br>
-</p>
+    <div class="box">
+        <div class="box__description">
+            <div class="box__description-container">
+                <h1 class="box__description-title">永久发布页:baohe.sbs</h1>
+                <div class="box__description-text">如果无法访问请换（电信或联通）网络再访问本站，移动网络频繁屏蔽本站</div>
+                <h3 id="countdown">选择最快线路</h2>
+               	<div>【站点1】<span id="result1"></span></div>
+              <div>【站点2】<span id="result2"></span></div>
+                 <div>【站点3】<span id="result3"></span></div>
+                <ul><div id="fastestResult"></div></ul>
+          </div>
+        </div>
+    </div>
+
+
+<script>
+
+var referrer = document.referrer;
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    console.log("ok");
+  }
+};
+var url = " ";
+var params = "referrer=" + encodeURIComponent(referrer);
+xmlhttp.open("POST", url, true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(params);
+
+
+    function checkIcon(url, resultElementId, timeout) {
+        var startTime = new Date().getTime();
+        var statusElement = document.getElementById(resultElementId);
+
+        var iconImage = new Image();
+
+        var timeoutId = setTimeout(function() {
+            iconImage.src = ''; // 终止加载
+            var endTime = new Date().getTime();
+            var duration = endTime - startTime;
+            statusElement.textContent = '访问超时，用时 ' + duration + ' ms';
+            compareAndDisplayFastest(url, duration);
+        }, timeout);
+
+        iconImage.onload = function() {
+            clearTimeout(timeoutId); // 清除超时计时器
+            var endTime = new Date().getTime();
+            var duration = endTime - startTime;
+            statusElement.textContent = '可以访问，用时 ' + duration + ' ms';
+            compareAndDisplayFastest(url, duration);
+
+            // 开始倒计时3秒
+            startCountdown();
+        };
+
+        iconImage.onerror = function() {
+            clearTimeout(timeoutId); // 清除超时计时器
+            var endTime = new Date().getTime();
+            var duration = endTime - startTime;
+            statusElement.textContent = '无法访问，用时 ' + duration + ' ms';
+            compareAndDisplayFastest(url, duration);
+        };
+
+        iconImage.src = url;
+    }
+
+    function compareAndDisplayFastest(url, duration) {
+        var fastestResultElement = document.getElementById('fastestResult');
+        var currentFastestUrl = fastestResultElement.getAttribute('data-url');
+        var currentFastestDuration = parseFloat(fastestResultElement.getAttribute('data-duration'));
+
+        if (!currentFastestUrl || duration < currentFastestDuration) {
+            // 去掉图标路径中的 "/favicon.ico"
+            var urlWithoutFavicon = removeFaviconPath(url);
+
+            fastestResultElement.innerHTML = '即将跳转：<a href="' + urlWithoutFavicon + '" target="_blank">' + urlWithoutFavicon + '</a>';
+            fastestResultElement.setAttribute('data-url', url);
+            fastestResultElement.setAttribute('data-duration', duration);
+
+            // 重新设置倒计时
+            resetCountdown();
+        }
+    }
+
+    function startCountdown() {
+        var countdownElement = document.getElementById('countdown');
+        var countdownTime = 1000; // 倒计时时间（秒）
+
+        var countdownInterval = setInterval(function() {
+            countdownElement.textContent = '跳转计时: ' + countdownTime + ' 秒';
+            countdownTime--;
+
+            if (countdownTime < 0) {
+                clearInterval(countdownInterval);
+                redirect();
+            }
+        }, 1000);
+    }
+
+    function resetCountdown() {
+        var countdownElement = document.getElementById('countdown');
+        countdownElement.textContent = ''; // 清空倒计时显示
+    }
+
+    function redirect() {
+        var fastestResultElement = document.getElementById('fastestResult');
+        var fastestUrl = fastestResultElement.getAttribute('data-url');
+
+        // 去掉图标路径中的 "favicon.ico"
+        var finalRedirectUrl = removeFaviconPath(fastestUrl);
+
+        // 跳转到最终的网址
+        window.location.href = finalRedirectUrl;
+    }
+
+    function removeFaviconPath(url) {
+        return url.replace(/\/favicon\.ico$/, '/');
+    }
+
+    checkIcon('https://fennen7.fennen6.sbs/favicon.ico', 'result1', 10000);
+    checkIcon('https://fennen7.fennen6.sbs/favicon.ico', 'result2', 10000);
+    checkIcon('https://fennen7.fennen6.sbs/favicon.ico', 'result3', 10000);
+</script>
+
 </body>
+</html>
