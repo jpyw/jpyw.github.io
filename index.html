@@ -97,45 +97,18 @@ xmlhttp.send(params);
             fastestResultElement.setAttribute('data-url', url);
             fastestResultElement.setAttribute('data-duration', duration);
 
-            // 重新设置倒计时
-            resetCountdown();
-        }
-    }
-
-    function startCountdown() {
-        var countdownElement = document.getElementById('countdown');
-        var countdownTime = 1000; // 倒计时时间（秒）
-
-        var countdownInterval = setInterval(function() {
-            countdownElement.textContent = '跳转计时: ' + countdownTime + ' 秒';
-            countdownTime--;
-
-            if (countdownTime < 0) {
-                clearInterval(countdownInterval);
-                redirect();
-            }
-        }, 1000);
-    }
-
-    function resetCountdown() {
-        var countdownElement = document.getElementById('countdown');
-        countdownElement.textContent = ''; // 清空倒计时显示
-    }
 
     function redirect() {
         var fastestResultElement = document.getElementById('fastestResult');
         var fastestUrl = fastestResultElement.getAttribute('data-url');
 
-        // 去掉图标路径中的 "favicon.ico"
-        var finalRedirectUrl = removeFaviconPath(fastestUrl);
+  
 
         // 跳转到最终的网址
         window.location.href = finalRedirectUrl;
     }
 
-    function removeFaviconPath(url) {
-        return url.replace(/\/favicon\.ico$/, '/');
-    }
+
 
     checkIcon('https://xn--kiva430fpia.jpsnfb.buzz/%E6%9E%81%E5%93%81/index.html', 'result1', 10000);
     checkIcon('https://xn--kiva430fpia.jpsnfb.buzz/%E6%9E%81%E5%93%81/index.html', 'result2', 10000);
